@@ -1,10 +1,9 @@
 package main
 
 import (
+	"github.com/darkedges/terraform-provider-fram/fram"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
-
-	"terraform-provider-fram/fram"
 )
 
 func main() {
