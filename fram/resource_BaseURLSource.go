@@ -12,8 +12,7 @@ import (
 
 func resourceBaseURLSource() *schema.Resource {
 	return &schema.Resource{
-		Description: `This helps automate [https://backstage.forgerock.com/docs/am/6.5/oidc1-guide/index.html#configure-base-url-source](Configuring the Base URL Source Service)
-`,
+		Description: "This helps automate [Configuring the Base URL Source Service](https://backstage.forgerock.com/docs/am/6.5/oidc1-guide/index.html#configure-base-url-source)",
 
 		CreateContext: resourceOrderCreate,
 		ReadContext:   resourceOrderRead,

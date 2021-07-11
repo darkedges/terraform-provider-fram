@@ -5,7 +5,7 @@ description: |-
   The ForgeRock Access Manager provider provides configuration management resources for ForgeRock Access Manager.
 ---
 
-# Redshift Provider
+# ForgeRock Access Manager Provider
 
 The ForgeRock Access Manager provider provides configuration management resources for
 [ForgeRock Access Manager](https://www.forgerock.com/platform/access-management).

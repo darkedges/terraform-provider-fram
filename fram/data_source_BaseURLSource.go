@@ -10,9 +10,7 @@ import (
 
 func dataSourceBaseURLSource() *schema.Resource {
 	return &schema.Resource{
-		Description: `
-		Returns details about the [https://backstage.forgerock.com/docs/am/6.5/oidc1-guide/index.html#configure-base-url-source](Base URL Source Service)
-		`,
+		Description: "Returns details about the [Base URL Source Service](https://backstage.forgerock.com/docs/am/6.5/oidc1-guide/index.html#configure-base-url-source)",
 		ReadContext: dataSourceBaseURLSourceRead,
 		Schema: map[string]*schema.Schema{
 			"source": {

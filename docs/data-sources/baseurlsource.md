@@ -3,12 +3,12 @@
 page_title: "fram_baseurlsource Data Source - terraform-provider-fram"
 subcategory: ""
 description: |-
-  Returns details about the [https://backstage.forgerock.com/docs/am/6.5/oidc1-guide/index.html#configure-base-url-source](Base URL Source Service)
+  Returns details about the Base URL Source Service https://backstage.forgerock.com/docs/am/6.5/oidc1-guide/index.html#configure-base-url-source
 ---
 
 # fram_baseurlsource (Data Source)
 
-Returns details about the [https://backstage.forgerock.com/docs/am/6.5/oidc1-guide/index.html#configure-base-url-source](Base URL Source Service)
+Returns details about the [Base URL Source Service](https://backstage.forgerock.com/docs/am/6.5/oidc1-guide/index.html#configure-base-url-source)
 
 ## Example Usage
 
