@@ -38,10 +38,10 @@ resource "fram_baseurlsource" "example" {
 	- Forwarded header. `FORWARDED_HEADER`
 
 		Specifies that the base URL is retrieved from a forwarded header field in the HTTP request. The Forwarded HTTP header field is standardized and specified in [RFC7239](https://tools.ietf.org/html/rfc7239).
-	- Host/protocol from incoming request. `EXTENSION_CLASS`
+	- Host/protocol from incoming request. `REQUEST_VALUES`
 
 		Specifies that the hostname, server name, and port are retrieved from the incoming HTTP request.
-	- X-Forwarded-* headers. `EXTENSION_CLASS`
+	- X-Forwarded-* headers. `X_FORWARDED_HEADERS`
 
 		Specifies that the base URL is retrieved from non-standard header fields, such as `X-Forwarded-For`, `X-Forwarded-By`, and `X-Forwarded-Proto`.
 
