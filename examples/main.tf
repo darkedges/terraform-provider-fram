@@ -8,9 +8,9 @@ terraform {
 }
 
 provider "fram" {
-  base_url = "https://fram.example.com/openam"
+  base_url = "https://fram.darkedges.com/openam"
   username = "amadmin"
-  password = "xxxxxxx"
+  password = "Passw0rd"
   realm    = "/root"
 }
 
@@ -24,7 +24,7 @@ output "psl" {
 
 resource "fram_baseurlsource" "test" {
   source = "FIXED_VALUE"
-  fixed_value = "https://fram.example.com"
+  fixed_value = "https://fram.darkedges.com"
   context_path = "/openam"
 }
 
