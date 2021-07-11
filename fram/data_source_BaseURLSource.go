@@ -10,24 +10,40 @@ import (
 
 func dataSourceBaseURLSource() *schema.Resource {
 	return &schema.Resource{
+		Description: `
+		Returns details about the [https://backstage.forgerock.com/docs/am/6.5/oidc1-guide/index.html#configure-base-url-source](Base URL Source Service)
+		`,
 		ReadContext: dataSourceBaseURLSourceRead,
 		Schema: map[string]*schema.Schema{
 			"source": {
 				Type:     schema.TypeString,
 				Computed: true,
+				Description: "Specifies the source of the base URL. Choose from the following:\n\n" +
+					"	- Extension class. `EXTENSION_CLASS`\n\n" +
+					"		Specifies that the extension class returns a base URL from a provided `HttpServletRequest`. In the Extension class name field, enter org.forgerock.openam.services.baseurl.BaseURLProvider.\n" +
+					"	- Fixed value. `FIXED_VALUE`\n\n" +
+					"		Specifies that the base URL is retrieved from a specific base URL value. In the Fixed value base URL field, enter the base URL value.\n" +
+					"	- Forwarded header. `FORWARDED_HEADER`\n\n" +
+					"		Specifies that the base URL is retrieved from a forwarded header field in the HTTP request. The Forwarded HTTP header field is standardized and specified in [RFC7239](https://tools.ietf.org/html/rfc7239).\n" +
+					"	- Host/protocol from incoming request. `EXTENSION_CLASS`\n\n" +
+					"		Specifies that the hostname, server name, and port are retrieved from the incoming HTTP request.\n" +
+					"	- X-Forwarded-* headers. `EXTENSION_CLASS`\n\n" +
+					"		Specifies that the base URL is retrieved from non-standard header fields, such as `X-Forwarded-For`, `X-Forwarded-By`, and `X-Forwarded-Proto`.\n",
 			},
 			"context_path": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "Specifies the context path for the base URL.",
 			},
 			"fixed_value": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "If Fixed value is selected as the Base URL source, the base URL in the Fixed value base URL field.",
 			},
 			"extension_class_name": {
-				Type:     schema.TypeString,
-				Computed: true,
-				Optional: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "If Extension class is selected as the Base URL source, the Extension class name field.",
 			},
 		},
 	}

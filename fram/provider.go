@@ -12,27 +12,30 @@ import (
 func Provider() *schema.Provider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
-			"base_url": &schema.Schema{
+			"base_url": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("FRAM_BASEURL", nil),
+				DefaultFunc: schema.EnvDefaultFunc("FRAM_BASEURL", "http://localhost:8080/openam"),
+				Description: "FRAM base URL to connect as, must include the application context i.e `https://fram.example.com/openam`.<BR>The default is `http://localhost:8080/openam`",
 			},
-			"username": &schema.Schema{
+			"username": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("FRAM_USERNAME", nil),
+				DefaultFunc: schema.EnvDefaultFunc("FRAM_USERNAME", "amadmin"),
+				Description: "FRAM username to connect as.<BR>The default is `amadmin`",
 			},
-			"password": &schema.Schema{
+			"password": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Sensitive:   true,
-				DefaultFunc: schema.EnvDefaultFunc("FRAM_PASSWORD", nil),
+				DefaultFunc: schema.EnvDefaultFunc("FRAM_PASSWORD", "p4ssw0rd"),
+				Description: "FRAM password of username to connect as.<BR>The default is `p4ssw0rd`",
 			},
-			"realm": &schema.Schema{
+			"realm": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Sensitive:   true,
-				DefaultFunc: schema.EnvDefaultFunc("FRAM_REALM", nil),
+				DefaultFunc: schema.EnvDefaultFunc("FRAM_REALM", "/realm"),
+				Description: "FRAM realm to use i.e `/root`.<BR>The default is `/realm`",
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
