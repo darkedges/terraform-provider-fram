@@ -28,7 +28,7 @@ bin
 
 ### Terraform ###
 # Local .terraform directories
-**/.terraform/*
+examples/scratch/.terraform/*
 
 # .tfstate files
 *.tfstate
@@ -63,4 +63,5 @@ override.tf.json
 terraform.rc
 terraform
 
-examples/.terraform.lock.hcl
+.idea/*
+demo/*

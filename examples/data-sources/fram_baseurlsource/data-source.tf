@@ -1,1 +1,3 @@
-data "fram_baseurlsource" "all" {}
+data "fram_baseurlsource" "example" {
+
+}

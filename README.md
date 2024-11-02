@@ -3,7 +3,7 @@
 Run the following command to build the provider
 
 ```shell
-go build -o terraform-provider-fram
+go build -o terraform-provider-internal
 ```
 
 ## Test sample configuration
