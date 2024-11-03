@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 // Ensure ScaffoldingProvider satisfies various provider interfaces.
@@ -68,8 +69,12 @@ func (p *FRAMProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	// Example client configuration for data sources and resources
+	tflog.Debug(ctx, "%s", map[string]interface{}{
+		"Host":     data.Host.ValueStringPointer(),
+		"Username": data.Username.ValueStringPointer(),
+		"Password": data.Password.ValueStringPointer(),
+		"Realm":    data.Realm.ValueStringPointer(),
+	})
 	client, _ := fram.NewClient(data.Host.ValueStringPointer(), data.Username.ValueStringPointer(), data.Password.ValueStringPointer(), data.Realm.ValueStringPointer())
 	resp.DataSourceData = client
 	resp.ResourceData = client
