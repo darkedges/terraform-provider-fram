@@ -6,7 +6,7 @@ package provider
 import (
 	"context"
 	"fmt"
-	"github.com/darkedges/fram-client-go"
+	"github.com/darkedges/fram-client-go/fram"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"

@@ -3,7 +3,7 @@ module github.com/darkedges/terraform-provider-fram
 go 1.22.7
 
 require (
-	github.com/darkedges/fram-client-go v0.0.0-20210710064222-4831ee2a826a
+	github.com/darkedges/fram-client-go v0.0.0-20241103043620-07c38d5381f0
 	github.com/hashicorp/terraform-plugin-framework v1.13.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.34.0
 )

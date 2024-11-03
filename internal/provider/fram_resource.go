@@ -6,13 +6,13 @@ package provider
 import (
 	"context"
 	"fmt"
-	"net/http"
-
+	"github.com/darkedges/fram-client-go/fram"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"strings"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -25,7 +25,7 @@ func NewBaseURLSourceResource() resource.Resource {
 
 // BaseURLSourceResource defines the resource implementation.
 type BaseURLSourceResource struct {
-	client *http.Client
+	client *fram.Client
 }
 
 // BaseURLSourceModel describes the resource data model.
@@ -81,7 +81,7 @@ func (r *BaseURLSourceResource) Configure(ctx context.Context, req resource.Conf
 		return
 	}
 
-	client, ok := req.ProviderData.(*http.Client)
+	client, ok := req.ProviderData.(*fram.Client)
 
 	if !ok {
 		resp.Diagnostics.AddError(
@@ -105,21 +105,27 @@ func (r *BaseURLSourceResource) Create(ctx context.Context, req resource.CreateR
 		return
 	}
 
-	// If applicable, this is a great opportunity to initialize any necessary
-	// provider client data and make a call using it.
-	// httpResp, err := r.client.Do(httpReq)
-	// if err != nil {
-	//     resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create example, got error: %s", err))
-	//     return
-	// }
+	bus := fram.BaseURLSource{
+		Contextpath:        data.ContextPath.ValueString(),
+		ExtensionClassName: data.ExtensionClassName.ValueString(),
+		FixedValue:         data.FixedValue.ValueString(),
+		Source:             data.Source.ValueString(),
+	}
+	result, err := r.client.CreateBaseURLSource(bus)
+	if err != nil {
+		if !strings.HasPrefix(err.Error(), "status: 201, body:") {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create Base URL service, got error: %s", err))
+			return
+		}
+	}
 
-	// For the purposes of this example code, hardcoding a response value to
-	// save into the Terraform state.
-	data.ContextPath = types.StringValue("ContextPath")
-	data.Source = types.StringValue("Source")
-	data.ExtensionClassName = types.StringValue("ExtensionClassName")
-	data.FixedValue = types.StringValue("FixedValue")
-
+	if result != nil {
+		// save into the Terraform state.
+		data.ContextPath = types.StringValue(result.Contextpath)
+		data.Source = types.StringValue(result.Source)
+		data.ExtensionClassName = types.StringValue(result.ExtensionClassName)
+		data.FixedValue = types.StringValue(result.FixedValue)
+	}
 	// Write logs using the tflog package
 	// Documentation: https://terraform.io/plugin/log
 	tflog.Trace(ctx, "created a resource")
@@ -138,13 +144,17 @@ func (r *BaseURLSourceResource) Read(ctx context.Context, req resource.ReadReque
 		return
 	}
 
-	// If applicable, this is a great opportunity to initialize any necessary
-	// provider client data and make a call using it.
-	// httpResp, err := r.client.Do(httpReq)
-	// if err != nil {
-	//     resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read example, got error: %s", err))
-	//     return
-	// }
+	result, err := r.client.GetBaseURLSource()
+	if err != nil {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create Base URL service, got error: %s", err))
+		return
+	}
+
+	// save into the Terraform state.
+	data.ContextPath = types.StringValue(result.Contextpath)
+	data.Source = types.StringValue(result.Source)
+	data.ExtensionClassName = types.StringValue(result.ExtensionClassName)
+	data.FixedValue = types.StringValue(result.FixedValue)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -159,14 +169,24 @@ func (r *BaseURLSourceResource) Update(ctx context.Context, req resource.UpdateR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	// If applicable, this is a great opportunity to initialize any necessary
-	// provider client data and make a call using it.
-	// httpResp, err := r.client.Do(httpReq)
-	// if err != nil {
-	//     resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update example, got error: %s", err))
-	//     return
-	// }
+	bus := fram.BaseURLSource{
+		Contextpath:        data.ContextPath.ValueString(),
+		ExtensionClassName: data.ExtensionClassName.ValueString(),
+		FixedValue:         data.FixedValue.ValueString(),
+		Source:             data.Source.ValueString(),
+	}
+	result, err := r.client.UpdateBaseURLSource(bus)
+	if err != nil {
+		if !strings.HasPrefix(err.Error(), "status: 201, body:") {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create Base URL service, got error: %s", err))
+			return
+		}
+	}
+	// save into the Terraform state.
+	data.ContextPath = types.StringValue(result.Contextpath)
+	data.Source = types.StringValue(result.Source)
+	data.ExtensionClassName = types.StringValue(result.ExtensionClassName)
+	data.FixedValue = types.StringValue(result.FixedValue)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -182,13 +202,10 @@ func (r *BaseURLSourceResource) Delete(ctx context.Context, req resource.DeleteR
 		return
 	}
 
-	// If applicable, this is a great opportunity to initialize any necessary
-	// provider client data and make a call using it.
-	// httpResp, err := r.client.Do(httpReq)
-	// if err != nil {
-	//     resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to delete example, got error: %s", err))
-	//     return
-	// }
+	_, err := r.client.DeleteBaseURLSource()
+	if err != nil {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to delete example, got error: %s", err))
+	}
 }
 
 func (r *BaseURLSourceResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
