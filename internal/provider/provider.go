@@ -6,6 +6,8 @@ package provider
 import (
 	"context"
 	"github.com/darkedges/fram-client-go/fram"
+	"github.com/darkedges/terraform-provider-fram/internal/provider/baseurlsource"
+	"github.com/darkedges/terraform-provider-fram/internal/provider/serviceaccount"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
@@ -33,7 +35,7 @@ type FRAMProviderModel struct {
 }
 
 func (p *FRAMProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
-	resp.TypeName = "baseurlsource"
+	resp.TypeName = "ping"
 	resp.Version = p.version
 }
 
@@ -75,13 +77,15 @@ func (p *FRAMProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 
 func (p *FRAMProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		NewBaseURLSourceResource,
+		baseurlsource.NewBaseURLSourceResource,
+		serviceaccount.NewServiceAccountResource,
 	}
 }
 
 func (p *FRAMProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
-		NewBaseURLSourceDataSource,
+		baseurlsource.NewBaseURLSourceDataSource,
+		serviceaccount.NewServiceAccountDataSource,
 	}
 }
 
