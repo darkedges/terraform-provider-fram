@@ -23,6 +23,7 @@ type ServiceAccountDataSource struct {
 }
 
 type ServiceAccountDataSourceModel struct {
+	Id            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	Description   types.String `tfsdk:"description"`
 	Scopes        types.List   `tfsdk:"scopes"`
@@ -39,8 +40,12 @@ func (s ServiceAccountDataSource) Schema(ctx context.Context, req datasource.Sch
 		MarkdownDescription: "PingOne Advanced Identity Cloud Service Account",
 
 		Attributes: map[string]schema.Attribute{
-			"name": schema.StringAttribute{
+			"id": schema.StringAttribute{
 				Required:    true,
+				Description: "Id",
+			},
+			"name": schema.StringAttribute{
+				Computed:    true,
 				Description: "Name",
 			},
 			"description": schema.StringAttribute{
@@ -50,15 +55,15 @@ func (s ServiceAccountDataSource) Schema(ctx context.Context, req datasource.Sch
 			"scopes": schema.ListAttribute{
 				ElementType: types.StringType,
 				Computed:    true,
-				Description: "scopes",
+				Description: "Scopes",
 			},
 			"account_status": schema.StringAttribute{
 				Computed:    true,
-				Description: "Account Statyus",
+				Description: "Account Status",
 			},
 			"jwks": schema.StringAttribute{
 				Computed:    true,
-				Description: "jwks",
+				Description: "JWKS",
 			},
 		},
 	}
@@ -92,15 +97,16 @@ func (s ServiceAccountDataSource) Read(ctx context.Context, req datasource.ReadR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	// For the purposes of this example code, hardcoding a response value to
-	// save into the Terraform state.
-	data.Name = types.StringValue("Name")
-	data.Description = types.StringValue("Description")
-	elements := []string{"one", "two"}
-	listValue, _ := types.ListValueFrom(ctx, types.StringType, elements)
+
+	bus := s.client.Frodo.ReadServiceAccount(data.Id.ValueString())
+
+	// For the purposes of this example code, hardcoding a response value to save into the Terraform state.
+	data.Name = types.StringValue(bus.Name)
+	data.Description = types.StringValue(bus.Description)
+	listValue, _ := types.ListValueFrom(ctx, types.StringType, bus.Scopes)
 	data.Scopes = listValue
-	data.AccountStatus = types.StringValue("AccountStatus")
-	data.JWKS = types.StringValue("JWKS")
+	data.AccountStatus = types.StringValue(bus.AccountStatus)
+	data.JWKS = types.StringValue(bus.Jwks)
 
 	// Write logs using the tflog package
 	// Documentation: https://terraform.io/plugin/log

@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 // Ensure ScaffoldingProvider satisfies various provider interfaces.
@@ -28,10 +29,11 @@ type FRAMProvider struct {
 
 // FRAMProviderModel describes the provider data model.
 type FRAMProviderModel struct {
-	Host     types.String `tfsdk:"host"`
-	Username types.String `tfsdk:"username"`
-	Password types.String `tfsdk:"password"`
-	Realm    types.String `tfsdk:"realm"`
+	Host       types.String `tfsdk:"host"`
+	Username   types.String `tfsdk:"username"`
+	Password   types.String `tfsdk:"password"`
+	TOTPSecret types.String `tfsdk:"totp_secret"`
+	Realm      types.String `tfsdk:"realm"`
 }
 
 func (p *FRAMProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -44,14 +46,18 @@ func (p *FRAMProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 		Attributes: map[string]schema.Attribute{
 			"host": schema.StringAttribute{
 				MarkdownDescription: "FRAM Host to connect as, must include the application context i.e `https://internal.example.com/openam`.<BR>The default is `http://localhost:8080/openam`",
-				Optional:            true,
+				Required:            true,
 			},
 			"username": schema.StringAttribute{
 				MarkdownDescription: "FRAM username to connect as.<BR>The default is `amadmin`",
-				Optional:            true,
+				Required:            true,
 			},
 			"password": schema.StringAttribute{
 				MarkdownDescription: "FRAM Password of username to connect as.<BR>The default is `p4ssw0rd`",
+				Required:            true,
+			},
+			"totp_secret": schema.StringAttribute{
+				MarkdownDescription: "If P1AIC and Admin Account provide a TOTP Secret",
 				Optional:            true,
 			},
 			"realm": schema.StringAttribute{
@@ -70,7 +76,10 @@ func (p *FRAMProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	client, _ := fram.NewClient(data.Host.ValueStringPointer(), data.Username.ValueStringPointer(), data.Password.ValueStringPointer(), data.Realm.ValueStringPointer())
+	tflog.Info(ctx, "Request", map[string]interface{}{
+		"TOTPSecret": data.TOTPSecret.ValueString(),
+	})
+	client, _ := fram.NewClient(data.Host.ValueStringPointer(), data.Username.ValueStringPointer(), data.Password.ValueStringPointer(), data.Realm.ValueStringPointer(), data.TOTPSecret.ValueStringPointer())
 	resp.DataSourceData = client
 	resp.ResourceData = client
 }
